@@ -1,0 +1,29 @@
+name: tests
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  fast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest -q
+  reproducibility:
+    # Re-runs stage 1 (about a minute) and compares to the committed results. Informational: a newer scikit-learn
+    # may legitimately change a Random Forest's numbers, which is a reason to re-run the study, not a broken build.
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+      - run: pip install -r requirements.txt pytest
+      - run: python -m pytest -q -m slow

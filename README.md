@@ -1,5 +1,7 @@
 # Hybrid Edge-AI Mine Tremor Detection — Simulation Study
 
+[![tests](https://github.com/RakshitRPathak/Mining-tremor-detection-Patent-cum-grant/actions/workflows/ci.yml/badge.svg)](https://github.com/RakshitRPathak/Mining-tremor-detection-Patent-cum-grant/actions/workflows/ci.yml)
+
 Software simulation of a distributed, edge-AI tremor detection system for underground mines. Each sensor node (ESP32 + MPU6050 IMU) classifies vibration with a Random Forest, validates the prediction against physical thresholds (hybrid validation), and a hazard is confirmed only when multiple nodes agree (multi-node consensus).
 
 > **Important:** every result in this repository comes from **synthetic signals**. The simulations validate the detection and firmware logic under controlled conditions. They are not hardware or field measurements, and performance on real mine vibration is expected to be lower.
@@ -29,6 +31,8 @@ IMU sensing → preprocessing → feature extraction → Random Forest → hybri
 pip install -r requirements.txt
 bash run_all.sh
 ```
+
+Tests: `pip install pytest && python -m pytest -q` (15 tests, about 2 s: signal generators, the gravity-removed envelope, and a check that every number in this README matches `results/`). `python -m pytest -q -m slow` re-runs stage 1 and confirms it reproduces the committed results exactly.
 
 The stages depend on each other, so run them in order (`run_all.sh` does this). To run one manually, work from `src/`: `cd src && python tremor_simulation.py`. Fixed random seeds make every number reproducible. A full run takes a few minutes on a laptop.
 
